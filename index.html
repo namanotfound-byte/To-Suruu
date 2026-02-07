@@ -32,7 +32,7 @@
     .buttons {
       display: flex;
       justify-content: center;
-      gap: 25px; /* 👈 reduced gap */
+      gap: 25px;
       position: relative;
     }
 
@@ -43,8 +43,7 @@
       border-radius: 30px;
       cursor: pointer;
       position: relative;
-
-      transition: transform 0.4s ease;
+      transition: transform 0.25s ease; /* smooth, human */
     }
 
     #yesBtn {
@@ -105,16 +104,12 @@
       playing = !playing;
     };
 
-    // small playful movement only
-    noBtn.addEventListener("mouseenter", () => {
-      const x = Math.random() * 1000 - 800; // 👈 small shift
-      const y = Math.random() * 1200 - 1000;
+    /* ✅ GOOD NO LOGIC (playful, bounded, smooth) */
+    noBtn.onmouseover = () => {
+      const x = Math.random() * 120 - 60;  // left/right
+      const y = Math.random() * 80 - 40;   // up/down
       noBtn.style.transform = `translate(${x}px, ${y}px)`;
-    });
-
-    noBtn.addEventListener("mouseleave", () => {
-      noBtn.style.transform = "translate(0, 0)";
-    });
+    };
 
     yesBtn.onclick = () => {
       document.body.innerHTML = `
@@ -138,8 +133,3 @@
 
 </body>
 </html>
-
-
-
-
-
