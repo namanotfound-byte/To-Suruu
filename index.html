@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <title>Valentine?</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <style>
     * {
       box-sizing: border-box;
@@ -18,6 +19,7 @@
       justify-content: center;
       align-items: center;
       overflow: hidden;
+      transition: background 0.4s;
     }
 
     .card {
@@ -45,6 +47,7 @@
       display: flex;
       justify-content: space-around;
       gap: 15px;
+      flex-wrap: wrap;
     }
 
     button {
@@ -65,12 +68,21 @@
     #no {
       background: #ddd;
       color: #333;
+      position: relative;
+    }
+
+    #theme {
+      background: #222;
+      color: white;
+      margin-top: 15px;
+      width: 100%;
     }
 
     button:hover {
       transform: scale(1.05);
     }
 
+    /* Floating hearts */
     .heart {
       position: absolute;
       color: rgba(255, 255, 255, 0.7);
@@ -91,21 +103,44 @@
         opacity: 0;
       }
     }
+
+    /* Dark mode */
+    .dark {
+      background: linear-gradient(135deg, #141414, #2b2b2b);
+    }
+
+    .dark .card {
+      background: #1f1f1f;
+      color: #eee;
+    }
+
+    .dark p {
+      color: #ccc;
+    }
   </style>
 </head>
+
 <body>
+
+  <!-- Background music -->
+  <audio id="bgMusic" loop>
+    <source src="music.mp3" type="audio/mpeg">
+  </audio>
 
   <div class="card">
     <h1>Hey ❤️</h1>
     <p>Will you be my Valentine?</p>
+
     <div class="buttons">
       <button id="yes">Yes 💖</button>
       <button id="no">No 🙃</button>
     </div>
+
+    <button id="theme">🌙 Dark Mode</button>
   </div>
 
   <script>
-    // Floating hearts
+    /* Floating hearts */
     setInterval(() => {
       const heart = document.createElement("div");
       heart.className = "heart";
@@ -114,11 +149,33 @@
       heart.style.fontSize = 16 + Math.random() * 24 + "px";
       heart.style.animationDuration = 4 + Math.random() * 4 + "s";
       document.body.appendChild(heart);
-
       setTimeout(() => heart.remove(), 8000);
     }, 400);
 
-    document.getElementById("yes").onclick = () => {
+    const noBtn = document.getElementById("no");
+    const yesBtn = document.getElementById("yes");
+    const music = document.getElementById("bgMusic");
+
+    /* Runaway NO button */
+    noBtn.addEventListener("mouseenter", () => {
+      const x = Math.random() * 80 - 40;
+      const y = Math.random() * 80 - 40;
+      noBtn.style.transform = `translate(${x}px, ${y}px)`;
+    });
+
+    /* If NO is clicked anyway */
+    noBtn.onclick = () => {
+      document.body.innerHTML = `
+        <div class="card">
+          <h1>🤨</h1>
+          <p>Huh? Did you misclick?</p>
+        </div>
+      `;
+    };
+
+    /* YES button */
+    yesBtn.onclick = () => {
+      music.play();
       document.body.innerHTML = `
         <div class="card">
           <h1>YAY 💕</h1>
@@ -127,8 +184,9 @@
       `;
     };
 
-    document.getElementById("no").onclick = () => {
-      alert("Nice try. You don't get to say no 😌");
+    /* Dark mode toggle */
+    document.getElementById("theme").onclick = () => {
+      document.body.classList.toggle("dark");
     };
   </script>
 
